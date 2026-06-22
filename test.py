@@ -1,7 +1,7 @@
 import numpy as np
 
 from src.heston import heston_price
-from src.Heston_cf import heston_call_price_cf
+from src.heston_cf import heston_call_price_cf
 S0 = 100.0     # spot
 K = 100.0      # ATM strike
 T = 1.0        # 1 year

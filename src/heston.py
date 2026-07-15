@@ -1,19 +1,16 @@
 import numpy as np
 import QuantLib as ql
 
-from .data_loader import K, Price, PC, S, T
-from .data_loader import dateO, r, q, MarketPrice 
-from .data_loader import calendar, today, day_count
-
-from .Implied_vol import compute_implied_vol
-
 def heston_price(
         spot,
         strike,
         maturity,
         rate,
         dividend,
-        params):
+        params,
+        today,
+        day_count,
+    ):
 
     v0, theta, rho, kappa, sigma = [
         float(x) for x in params
@@ -83,21 +80,28 @@ def heston_price(
     return option.NPV()
 
 
+def heston_price_vector(
+    params,
+    spot,
+    strike,
+    maturity,
+    rate,
+    dividend,
+    today,
+    day_count,
+):
+    prices = np.zeros(len(strike))
 
-def heston_price_vector(params):
-
-    prices = np.zeros(len(K))
-
-    for i in range(len(K)):
-
+    for i in range(len(strike)):
         prices[i] = heston_price(
-            S[i],
-            K[i],
-            T[i],
-            r[i],
-            q[i],
-            params
-        )
-
+        spot[i],
+        strike[i],
+        maturity[i],
+        rate[i],
+        dividend[i],
+        params,
+        today,
+        day_count,
+    )
     return prices
 

@@ -1,10 +1,39 @@
 import numpy as np
 from scipy.optimize import least_squares
 
-from .heston import heston_price_vector, MarketPrice
-def objective(params):
+from .heston import heston_price_vector
 
-    model_prices = heston_price_vector(params)
+from .data_loader import (
+    S,
+    K,
+    T,
+    r,
+    q,
+    MarketPrice,
+    today,
+    day_count,
+)
+
+def objective(params,
+    S,
+    K,
+    T,
+    r,
+    q,
+    MarketPrice,
+    today,
+    day_count,):
+
+    model_prices = heston_price_vector(
+    params,
+    S,
+    K,
+    T,
+    r,
+    q,
+    today,
+    day_count,
+)
 
     return model_prices - MarketPrice
 
@@ -37,8 +66,17 @@ upper_bounds = [
 result = least_squares(
     objective,
     initial_guess,
+    args=(
+        S,
+        K,
+        T,
+        r,
+        q,
+        MarketPrice,
+        today,
+        day_count,
+    ),
     bounds=(lower_bounds, upper_bounds),
     verbose=2,
-    max_nfev=50
+    max_nfev=50,
 )
-
